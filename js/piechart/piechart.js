@@ -1,12 +1,10 @@
 var ci = -1;
 $(document).ready(function() {
 	$(".example").piechart([
-		["Country", "M inhabitants"],
-		["China", 1360, 'blue'],
-		["India", 1234],
-		["USA", 316],
-		["Indonesia", 237],
-		["Brazil", 201]
+		["Country", "h / 1000 h"],
+		["Not yet", 15, '#e3e3dd'],
+		["Delay", 3, '#f4e5c0'],
+		["Done", 12, '#00bce3']
 
 		]);
 	$(".piechart-flatmin").on('mouseenter','.sector-s',hoverState);

@@ -3,10 +3,95 @@ CSS for 1000h
 2013/11/07
 */
 
-/* Header */
+/* Body
+----------------------------------------- */
+body {
+	background-color: #eee;
+	font-family: Helvetica, Arial;
+}
 
-/* Chart */
+#wrapper {}
 
-/* Circle */
 
-/* AD Space */
+/* Header
+----------------------------------------- */
+header {
+	height: 32px;
+	position: relative;
+	background-color: #9e978e;
+	color: #fff;
+	text-align: center;
+}
+h1 {
+	display: inline-block;
+	padding-top: 4px;
+	font-size: 24px;
+}
+a.hdr_btn {
+	position: absolute;
+	top: 8px;
+	right: 10px;
+	color: #fff;
+	font-size: 16px;
+	font-weight: normal;
+	text-decoration: none;
+}
+
+
+/* Status Panel
+----------------------------------------- */
+#status-panel {
+	width: 290px;
+	position: absolute;
+	top: 46px;
+	left: 15px;
+	background-color: #fff;
+	padding: 12px 0;
+	text-align: center;
+	-webkit-border-radius: 12px;
+	border-radius: 12px;
+	opacity: 0.9;
+}
+
+#status-panel h2 {
+	font-size: 21px;
+}
+
+
+/* Circle
+----------------------------------------- */
+#circle-area {
+	width: 300px;
+	margin-left: 15px;
+	padding-top: 210px;
+}
+
+.done, .delay, .yet {
+	display: inline-block;
+	width: 38px;
+	height: 38px;
+	margin: 0 8px 8px 0;
+	-webkit-border-radius: 20px;
+	border-radius: 20px;
+}
+
+.done {
+	background-color: #00bce3;
+}
+.delay {
+	background-color: #f4e5c0;
+}
+.yet {
+	background-color: #e3e3dd;
+}
+
+
+/* AD Space
+----------------------------------------- */
+#ad-area {
+	margin-top: 10px;
+	text-align: center;
+	color: #9e978e;
+
+
+}
