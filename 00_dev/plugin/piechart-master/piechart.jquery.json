@@ -1,0 +1,35 @@
+{
+    "name": "piechart",
+    "title": "Flat jQuery Piechart",
+    "description": "jQuery plugin for implementing a pure CSS piechart.",
+    "keywords": [
+        "piechart",
+        "css"
+    ],
+    "version": "1.0.0",
+    "author": {
+        "name": "Eric Wennerberg",
+        "email": "ericwenn@gmail.com",
+        "url": "http://ericwenn.se"
+    },
+    "maintainers": [
+        {
+            "name": "Eric Wennerberg",
+            "email": "ericwenn@gmail.com",
+            "url": "http://ericwenn.se"
+        }
+    ],
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://opensource.org/licenses/MIT"
+        }
+    ],
+    "bugs": "https://github.com/ericwenn/piechart/issues",
+    "homepage": "http://www.ericwenn.se/frameworks/flatmin/piechart/",
+    "docs": "http://www.ericwenn.se/frameworks/flatmin/piechart/",
+    "download": "http://www.ericwenn.se/frameworks/flatmin/piechart/flatmin-piechart.zip",
+    "dependencies": {
+        "jquery": ">=1.5"
+    }
+}
