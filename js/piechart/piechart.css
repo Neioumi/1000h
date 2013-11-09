@@ -6,30 +6,30 @@
 	width: 100%;
 }
 .piechart-flatmin .piehole {
-position: absolute;
-width: 70%;
-height: 70%;
-top: 15%;
-z-index: 2;
-border-radius: 50%;
-left: 15%;
-overflow: hidden;
-text-align: center;
-padding: 2em;
+	position: absolute;
+	width: 150px;
+	height: 150px;
+	top: 35px;
+	z-index: 2;
+	border-radius: 50%;
+	left: 35px;
+	overflow: hidden;
+	text-align: center;
+	padding: 20px;
 }
 .piehole .piehole-text {
 	font-weight: 300;
 	display: none;
 	position: absolute;
 	left: 15%;
-	top: 30%;
+	top: 22px;
 	width: 70%;
 }
 .piechart-flatmin.m .piehole-text {
 	font-size: 70%;
 }
 .piechart-flatmin.s .piehole-text {
-	top:22%;
+	top: 22%;
 	font-size: 70%;
 }
 
@@ -40,7 +40,8 @@ padding: 2em;
 	font-weight: 300;
 }
 .piehole-text .flatmin-percentage {
-	font-size:4em;
+	font-size: 4em;
+	padding: 2px 0 1px 4px;
 }
 .piehole-text .flatmin-percentage:after {
 	content: '%';
@@ -68,21 +69,23 @@ padding: 2em;
 }
 
 .piechart-flatmin .sector {
-	width: 100%;
-	height: 100%;
+	width: 260px;
+	height: 260px;
 	top: 0;
 	left: 0;
 	position: absolute;
 	pointer-events: none;
 }
 .sector.hover .sector-s {
-	border:0.5em rgba(255,255,255,0.5) solid;
+	border: 5px rgba(255,255,255,0.5) solid;
+	width: 250px;
+	height: 250px;
 }
 .sector-f {
 	pointer-events: none;
 	position: absolute;
-	width: 100%;
-	height: 100%;
+	width: 260px;
+	height: 260px;
 	top: 0;
 	border-radius: 50%;
 	left: 0;
@@ -92,14 +95,14 @@ padding: 2em;
 	pointer-events: auto;
 	position: absolute;
 	border-radius: 50%;
-	width: 100%;
-	height: 100%;
+	width: 260px;
+	height: 260px;
 	top: 0;
 	left: 0;
 }
-.example {
-	width: 50%;
-	padding: 1em;
+.chart {
+	width: 260px;
+	height: 260px;
 	margin: auto;
 }
 

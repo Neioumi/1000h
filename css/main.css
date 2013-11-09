@@ -8,15 +8,18 @@ CSS for 1000h
 body {
 	background-color: #eee;
 	font-family: Helvetica, Arial;
+	color: #2f2c27;
 }
 
-#wrapper {}
+.wrapper {
+	position: relative;
+}
 
 
 /* Header
 ----------------------------------------- */
 header {
-	height: 32px;
+	height: 40px;
 	position: relative;
 	background-color: #9e978e;
 	color: #fff;
@@ -24,13 +27,19 @@ header {
 }
 h1 {
 	display: inline-block;
-	padding-top: 4px;
+	padding-top: 8px;
 	font-size: 24px;
+	font-family: Copperplate;
 }
-a.hdr_btn {
+.hdr_btn_setting {
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: url(../img/icon_setting.png) no-repeat center 8px;
+	background-size: 20px 20px;
 	position: absolute;
-	top: 8px;
-	right: 10px;
+	top: 0;
+	right: 3px;
 	color: #fff;
 	font-size: 16px;
 	font-weight: normal;
@@ -40,30 +49,51 @@ a.hdr_btn {
 
 /* Status Panel
 ----------------------------------------- */
-#status-panel {
+.status-panel {
 	width: 290px;
 	position: absolute;
-	top: 46px;
+	top: 50px;
 	left: 15px;
 	background-color: #fff;
-	padding: 12px 0;
+	padding: 10px 0 15px;
+	font-family: Copperplate;
 	text-align: center;
-	-webkit-border-radius: 12px;
-	border-radius: 12px;
-	opacity: 0.9;
+	-webkit-border-radius: 14px;
+	border-radius: 14px;
+	opacity: 0.96;
 }
 
-#status-panel h2 {
+h2 {
 	font-size: 21px;
+	margin-bottom: 8px;
 }
+
+.period {
+	display: block;
+	width: 120px;
+	padding-top: 12px;
+	border-top: 2px solid #eee;
+	position: absolute;
+	top: 185px;
+	left: 85px;
+	text-align: center;
+	font-weight: 300;
+	font-size: 0.9em;
+	color: #625b54;
+	z-index: 3;
+}
+
 
 
 /* Circle
 ----------------------------------------- */
-#circle-area {
-	width: 300px;
-	margin-left: 15px;
-	padding-top: 210px;
+.circle-area {
+	display: block;
+	width: 302px;
+	height: 438px; /* (1136|960)/2-40px(header)-50px(ad)-40px(status) */
+	margin: 0 0 50px 15px; /* 50px for AD */
+	padding: 0;
+	overflow: scroll;
 }
 
 .done, .delay, .yet {
@@ -71,15 +101,15 @@ a.hdr_btn {
 	width: 38px;
 	height: 38px;
 	margin: 0 8px 8px 0;
-	-webkit-border-radius: 20px;
-	border-radius: 20px;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
 }
 
 .done {
 	background-color: #00bce3;
 }
 .delay {
-	background-color: #f4e5c0;
+	background-color: #f6d86f;
 }
 .yet {
 	background-color: #e3e3dd;
@@ -88,10 +118,13 @@ a.hdr_btn {
 
 /* AD Space
 ----------------------------------------- */
-#ad-area {
-	margin-top: 10px;
+.ad-area {
+	width: 320px;
+	height: 50px;
+	position: absolute;
+	top: 478px;
+	left: 0;
 	text-align: center;
 	color: #9e978e;
-
-
+	background: url(../img/bg_ad.png) repeat 0 0;
 }
