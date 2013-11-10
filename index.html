@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="js/piechart/piechart.css">
 <script src="js/jquery/jquery-2.0.3.min.js"></script>
 <script src="js/jquery.tappable.js"></script>
+<script src="js/main.js"></script>
 <script src="js/piechart/piechart.js"></script>
 </head>
 <body>
@@ -21,73 +22,76 @@
 		<a href="#" class="hdr_btn_setting"></a>
 	</header>
 
-	<div class="circle-area"><div class="inner" style="margin-top:282px">
-		<span class="done"></span>
-		<span class="done"></span>
-		<span class="done"></span>
-		<span class="done"></span>
-		<span class="done"></span>
-		<span class="done"></span>
-		<span class="done"></span>
-		<span class="done"></span>
-		<span class="done"></span>
-		<span class="done"></span>
-		<span class="done"></span>
-		<span class="done"></span>
-		<span class="delay"></span>
-		<span class="delay"></span>
-		<span class="delay"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
-		<span class="yet"></span>
+	<div id="circle-area"><div id="inner" style="margin-top:282px">
+		<span class="done"><span></span></span>
+		<span class="done"><span></span></span>
+		<span class="done"><span></span></span>
+		<span class="done"><span></span></span>
+		<span class="done"><span></span></span>
+		<span class="done"><span></span></span>
+		<span class="done"><span></span></span>
+		<span class="done"><span></span></span>
+		<span class="done"><span></span></span>
+		<span class="done"><span></span></span>
+		<span class="done"><span></span></span>
+		<span class="done"><span></span></span>
+		<span class="delay"><spna class="done_15min"></span></span>
+		<span class="delay"><spna class="done_30min"></span></span>
+		<span class="delay"><spna class="done_45min"></span></span>
+		<span class="delay"><span></span></span>
+		<span class="delay"><span></span></span>
+		<span class="delay"><span></span></span>
+		<span class="yet"><spna class="done_15min"></span></span>
+		<span class="yet"><spna class="done_30min"></span></span>
+		<span class="yet"><spna class="done_45min"></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
+		<span class="yet"><span></span></span>
 	</div></div><!-- /#circle-area -->
 
-	<div class="status-panel">
+	<div id="status-panel">
 		<h2>What you want to do</h2>
 		<div class="chart"></div>
-		<p class="period">yy/mm/dd<br>-<br>yy/mm/dd</p>
+		<p id="period">yy/mm/dd<br>-<br>yy/mm/dd</p>
 	</div>
 
 	<div class="ad-area">
