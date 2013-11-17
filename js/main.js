@@ -1,7 +1,34 @@
 // Set 3 status color
 
 
-// Set target
+// Save Settings
+$(document).ready(function(){
+	$('#settings form').submit(saveSettings);
+	loadSettings();
+	dispSettings();
+});
+
+// Save settings to localStorage
+function saveSettings() {
+	localStorage.goal = $('#goal').val();
+	localStorage.startdate = $('#startDate').val();
+	localStorage.goaldate = $('#goalDate').val();
+	return false;
+}
+
+// load settings from localStorage
+function loadSettings() {
+	$('#goal').val(localStorage.goal);
+	$('#startDate').val(localStorage.startdate);
+	$('#goalDate').val(localStorage.goaldate);
+}
+
+// Display settings on status-panel
+function dispSettings() {
+	$('#goaltxt').text(localStorage.goal);
+	$('#startdatetxt').text(localStorage.startdate);
+	$('#goaldatetxt').text(localStorage.goaldate);
+}
 
 
 // Display 1000 circles with .yet.

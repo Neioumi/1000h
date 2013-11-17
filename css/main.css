@@ -31,19 +31,27 @@ h1 {
 	font-size: 24px;
 	font-family: Copperplate;
 }
-.hdr_btn_setting {
+
+.hdr_btn_setting, .hdr_btn_back {
 	display: block;
 	width: 40px;
 	height: 40px;
-	background: url(../img/icon_setting.png) no-repeat center 8px;
-	background-size: 20px 20px;
 	position: absolute;
 	top: 0;
-	right: 3px;
 	color: #fff;
 	font-size: 16px;
 	font-weight: normal;
 	text-decoration: none;
+}
+.hdr_btn_setting {
+	background: url(../img/icon_setting.png) no-repeat center 8px;
+	background-size: 20px 20px;
+	right: 3px;
+}
+.hdr_btn_back {
+	background: url(../img/icon_back.png) no-repeat center 8px;
+	background-size: 20px 20px;
+	left: 3px;
 }
 
 
@@ -64,8 +72,13 @@ h1 {
 }
 
 h2 {
+	display: block;
+	max-width: 260px;
+	margin: 0 15px 8px;
 	font-size: 21px;
-	margin-bottom: 8px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 #period {
@@ -87,7 +100,7 @@ h2 {
 
 /* Circle
 ----------------------------------------- */
-#circle-area {
+#circles {
 	display: block;
 	width: 302px;
 	height: 438px; /* (1136|960)/2-40px(header)-50px(ad)-40px(status) */
@@ -146,11 +159,29 @@ h2 {
 	-webkit-transform: rotate(45deg);
 }
 
+/* Setting
+----------------------------------------- */
+#settings {
+	width: 290px;
+	margin: 10px auto;
+	text-align: center;
+}
 
+label {
+	display: block;
+	font-family: Copperplate;
+}
+
+input {
+	display: block;
+	width: 80%;
+	margin: 0.5em auto 1.5em;
+	padding: 2px;
+}
 
 /* AD Space
 ----------------------------------------- */
-.ad-area {
+.ad {
 	width: 320px;
 	height: 50px;
 	position: absolute;
