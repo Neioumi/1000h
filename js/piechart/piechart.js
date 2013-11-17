@@ -2,9 +2,9 @@ var ci = -1;
 $(document).ready(function() {
 	$(".chart").piechart([
 		["Country", "h / 1000 h"],
-		["Done", 120, '#00bce3'],
-		["Delay", 20, '#f6d86f'],
-		["Not yet", 860, '#e3e3dd'],
+		["Done", numDone, '#00bce3'],
+		["Delay", numDelay, '#f6d86f'],
+		["Not yet", numYet, '#e3e3dd'],
 		
 		]);
 	$(".piechart-flatmin").on('mouseenter','.sector-s',hoverState);
