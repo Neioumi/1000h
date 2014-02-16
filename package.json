@@ -1,0 +1,17 @@
+{
+  "name": "1000h",
+  "version": "0.0.0",
+  "description": "",
+  "main": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-bower-task": "~0.3.4",
+    "grunt-contrib-copy": "~0.5.0"
+  }
+}

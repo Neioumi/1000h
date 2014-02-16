@@ -1,0 +1,29 @@
+{
+  "name": "1000h",
+  "version": "0.0.0",
+  "license": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.0",
+    "fastclick": "~0.6.11",
+    "d3": "~3.4.1"
+  },
+  "exportsOverride": {
+    "jquery": {
+      "js": "**/*.js"
+    },
+    "d3": {
+      "js": "**/*.js"
+    },
+    "fastclick": {
+      "js": "**/*.js"
+    }
+  }
+}
