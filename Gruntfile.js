@@ -14,7 +14,6 @@ module.exports = function (grunt) {
         }
       }
     },
-
     copy: {
       libs: {
         files: [
@@ -37,6 +36,21 @@ module.exports = function (grunt) {
 
       // TODO: use cssmin instead of copy
       css: {expand: true, cwd: 'src/css', src: '*.css', dest: 'css'}
+    },
+    jasmine: {
+      all: {
+        src: 'src/js/*.js',
+        options: {
+          specs: 'spec/*Spec.js',
+          helpers: 'spec/*Helper.js'
+        }
+      }
+    },
+    watch: {
+      js: {
+        files: ['src/js/*.js', 'spec/*.js'],
+        tasks: ['jasmine:all']
+      }
     }
   });
 
