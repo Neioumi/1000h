@@ -47,6 +47,42 @@ describe("SheetStorage", function () {
     });
   });
 
+  describe("#clear", function () {
+    it('removes all values associated with the sheet ID', function () {
+      storage.set("foo", "value_for_foo1");
+      storage.set("bar", "value_for_bar1");
+      storage.clear();
+      expect(localStorage.getItem("sheet[1].foo")).toBeNull();
+      expect(localStorage.getItem("sheet[1].bar")).toBeNull();
+    });
+
+    it("doesn't remove other sheets values", function () {
+      storage.set("foo", "value_for_foo1");
+      (new SheetStorage(2)).set("foo", "value_for_foo2")
+      storage.clear();
+      expect(localStorage.getItem("sheet[1].foo")).toBeNull();
+      expect(localStorage.getItem("sheet[2].foo")).toEqual("value_for_foo2");
+    });
+  });
+
+  describe("#keys", function () {
+    beforeEach(function () {
+      storage.set("foo", "value_for_foo1");
+      storage.set("bar", "value_for_bar1");
+      (new SheetStorage(2)).set("baz", "value_for_baz2")
+    });
+
+    it('returns all keys associated with the sheet ID', function () {
+      var keys = storage.keys();
+      expect(keys.slice().sort()).toEqual(["foo", "bar"].sort());
+    });
+
+    it('returns raw keys when arg1=true', function () {
+      var keys = storage.keys(true);
+      expect(keys.slice().sort()).toEqual(["sheet[1].foo", "sheet[1].bar"].sort());
+    });
+  });
+
   describe("#keyFor", function () {
     it('returns "sheet[1].foo" when arg1=foo, id=1', function () {
       expect(storage.keyFor("foo")).toEqual("sheet[1].foo");
