@@ -1,5 +1,5 @@
 /**
- * Storage object.
+ * Sheet Storage object associated with the sheet ID.
  * @module Storage
  */
 
@@ -20,67 +20,68 @@ var _NODE_JS = !!global.process;
  * Create a new storage.
  *
  * @constructor
- * @param {Number} id storage id
+ * @param {Number} sheetId sheet ID
  */
-function Storage(id) {
-  this.id = id;
+function SheetStorage(sheetId) {
+  this.sheetId = sheetId;
 }
 
-Storage.createId = Storage_createId;
+SheetStorage.createId = SheetStorage_createId;
 
-Storage.prototype = {
-  getItem: Storage_getItem,
-  setItem: Storage_setItem,
-  removeItem: Storage_removeItem,
-  keyFor: Storage_keyFor
+SheetStorage.prototype = {
+     get: SheetStorage_get,
+     set: SheetStorage_set,
+  remove: SheetStorage_remove,
+  keyFor: SheetStorage_keyFor
 };
 
-Object.defineProperty(Storage.prototype, "title", {
-  get: Storage_get_title,
-  set: Storage_set_title
+Object.defineProperty(SheetStorage.prototype, "title", {
+  enumerable: true,
+  get: SheetStorage_get_title,
+  set: SheetStorage_set_title
 });
 
 // --- implement -------------------------------------------
 
 /**
- * Create new id.
+ * Create new sheet ID.
  *
- * @return {Number} new id
+ * @return {Number} new sheet ID
  */
-function Storage_createId() {
-  var new_id = Number(localStorage.getItem("id_sequence")) + 1;
-  localStorage.setItem("id_sequence", new_id);
+function SheetStorage_createId() {
+  var new_id = Number(Storage.get("sheet_id_sequence", 0)) + 1;
+  Storage.set("sheet_id_sequence", new_id);
   return new_id;
 }
 
-function Storage_get_title() {
-  return this.getItem("title");
+function SheetStorage_get_title() {
+  return this.get("title");
 }
 
-function Storage_set_title(title) {
-  this.setItem("title", title);
+function SheetStorage_set_title(title) {
+  this.set("title", title);
 }
 
-function Storage_getItem(name) {
-  return localStorage.getItem(this.keyFor(name));
+function SheetStorage_get(name, defaultValue) {
+  return Storage.get(this.keyFor(name), defaultValue);
 }
 
-function Storage_setItem(name, value) {
-  localStorage.setItem(this.keyFor(name), value);
+function SheetStorage_set(name, value) {
+  Storage.set(this.keyFor(name), value);
 }
 
-function Storage_removeItem(name) {
-  localStorage.removeItem(this.keyFor(name));
+function SheetStorage_remove(name) {
+  Storage.remove(this.keyFor(name));
 }
 
 /**
- * Make a key for localStorage.
+ * Make a key for raw Storage.
  *
  * @param {String} name name
  * @return {String} key
  */
-function Storage_keyFor(name) {
-  return name + this.id.toString();
+function SheetStorage_keyFor(name) {
+  return "sheet[" + this.sheetId.toString() + "]." + name;
 }
 
 if (_NODE_JS) {
@@ -90,8 +91,8 @@ if (_NODE_JS) {
 
 // --- export ----------------------------------------------
 if (_NODE_JS) {
-    module.exports = Storage;
+    module.exports = SheetStorage;
 }
-global.Storage = Storage;
+global.SheetStorage = SheetStorage;
 
 })(this.self || global);
