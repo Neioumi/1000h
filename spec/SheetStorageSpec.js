@@ -64,4 +64,34 @@ describe("SheetStorage", function () {
       expect(localStorage.getItem("sheet[1].title")).toEqual("foo title");
     });
   });
+
+  describe("startDate property", function () {
+    it('returns the start date as Date object when it is referred', function () {
+      var date = new Date();
+      localStorage.setItem("sheet[1].start_date", date.getTime());
+      expect(storage.startDate).toEqual(jasmine.any(Date));
+      expect(storage.startDate.getTime()).toEqual(date.getTime());
+    });
+
+    it('stores the start date when set a Date object', function () {
+      var date = new Date();
+      storage.startDate = date;
+      expect(localStorage.getItem("sheet[1].start_date")).toEqual(date.getTime().toString());
+    });
+  });
+
+  describe("goalDate property", function () {
+    it('returns the goal date as Date object when it is referred', function () {
+      var date = new Date();
+      localStorage.setItem("sheet[1].goal_date", date.getTime());
+      expect(storage.goalDate).toEqual(jasmine.any(Date));
+      expect(storage.goalDate.getTime()).toEqual(date.getTime());
+    });
+
+    it('stores the goal date when set a Date object', function () {
+      var date = new Date();
+      storage.goalDate = date;
+      expect(localStorage.getItem("sheet[1].goal_date")).toEqual(date.getTime().toString());
+    });
+  });
 });

@@ -29,16 +29,30 @@ function SheetStorage(sheetId) {
 SheetStorage.createId = SheetStorage_createId;
 
 SheetStorage.prototype = {
-     get: SheetStorage_get,
-     set: SheetStorage_set,
-  remove: SheetStorage_remove,
-  keyFor: SheetStorage_keyFor
+      get: SheetStorage_get,
+      set: SheetStorage_set,
+  getDate: SheetStorage_getDate,
+  setDate: SheetStorage_setDate,
+   remove: SheetStorage_remove,
+   keyFor: SheetStorage_keyFor
 };
 
-Object.defineProperty(SheetStorage.prototype, "title", {
-  enumerable: true,
-  get: SheetStorage_get_title,
-  set: SheetStorage_set_title
+Object.defineProperties(SheetStorage.prototype, {
+  "title": {
+    enumerable: true,
+    get: function ()      { return this.get("title"); },
+    set: function (value) { this.set("title", value); }
+  },
+  "startDate": {
+    enumerable: true,
+    get: function ()      { return this.getDate("start_date"); },
+    set: function (value) { this.setDate("start_date", value); }
+  },
+  "goalDate": {
+    enumerable: true,
+    get: function ()      { return this.getDate("goal_date"); },
+    set: function (value) { this.setDate("goal_date", value); }
+  }
 });
 
 // --- implement -------------------------------------------
@@ -54,12 +68,25 @@ function SheetStorage_createId() {
   return new_id;
 }
 
-function SheetStorage_get_title() {
-  return this.get("title");
+/**
+ * Return the value as Date object.
+ *
+ * @param {String} name the key
+ * @param {Date} the value
+ */
+function SheetStorage_getDate(name) {
+  var date = this.get(name);
+  return date !== null ? new Date(Number(date)) : null;
 }
 
-function SheetStorage_set_title(title) {
-  this.set("title", title);
+/**
+ * Store the value as UTC milliseconds using getTime() method.
+ *
+ * @param {String} name the key
+ * @param {Object} date the value
+ */
+function SheetStorage_setDate(name, date) {
+  this.set(name, date.getTime());
 }
 
 function SheetStorage_get(name, defaultValue) {
