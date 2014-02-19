@@ -1,50 +1,63 @@
 describe("Storage", function () {
-  var storage;
-
-  beforeEach(function () {
-    storage = new Storage(1);
-  });
-
   afterEach(function () {
     localStorage.clear();
   });
 
-  describe(".createId", function () {
-    it("returns 1 when id_sequence not exists", function () {
-      expect(Storage.createId()).toEqual(1);
+  describe("#get", function () {
+    it("returns specified default value when it does not exist", function () {
+      expect(Storage.get("foo", 123)).toEqual(123);
     });
 
-    it("returns 2 when id_sequence=1", function () {
-      localStorage.setItem("id_sequence", 1);
-      expect(Storage.createId()).toEqual(2);
-    });
-  });
-
-  describe("#getItem", function () {
-    it('returns the value for "foo1" when arg1=foo, id=1', function () {
-      localStorage.setItem("foo1", "value_for_foo1");
-      expect(storage.getItem("foo")).toEqual("value_for_foo1");
+    it("returns null when it does not exist and defaultValue is ommitted", function () {
+      expect(Storage.get("foo")).toBeNull();
     });
   });
 
-  describe("#setItem", function () {
-    it('sets the value for "foo1" when arg1=foo, id=1', function () {
-      storage.setItem("foo", "value_for_foo1");
-      expect(localStorage.getItem("foo1")).toEqual("value_for_foo1");
+  describe("#getJSON", function () {
+    it("fetches the value as JSON", function () {
+      var obj = {foo: 123};
+      localStorage.setItem("foo", JSON.stringify(obj));
+      expect(Storage.getJSON("foo")).toEqual(obj);
+    });
+
+    it("returns specified default value when it does not exist", function () {
+      expect(Storage.getJSON("foo", 123)).toEqual(123);
+    });
+
+    it("throws an error when the value is not JSON string", function () {
+      // "bar" <= JSON string
+      // bar   <= NOT JSON string
+      localStorage.setItem("foo", "bar");
+      expect(function () {
+        Storage.getJSON("foo");
+      }).toThrow();
     });
   });
 
-  describe("#removeItem", function () {
-    it('removes the value for "foo1" when arg1=foo, id=1', function () {
-      storage.setItem("foo", "value_for_foo1");
-      storage.removeItem("foo");
-      expect(localStorage.getItem("foo1")).toBeNull();
+  describe("#setJSON", function () {
+    it("stores the value as JSON", function () {
+      var obj = {foo: 123};
+      Storage.setJSON("foo", obj);
+      expect(localStorage.getItem("foo")).toEqual(JSON.stringify(obj));
     });
   });
 
-  describe("#keyFor", function () {
-    it('returns "foo1" when arg1=foo, id=1', function () {
-      expect(storage.keyFor("foo")).toEqual("foo1");
+  describe("#keys", function () {
+    it("returns all keys", function () {
+      Storage.set("foo", 1);
+      Storage.set("bar", 2);
+      expect(Storage.keys().slice().sort()).toEqual(["foo", "bar"].sort());
+    });
+  });
+
+  describe("#has", function () {
+    it("returns true when the key exists", function () {
+      Storage.set("foo", 1);
+      expect(Storage.has("foo")).toBe(true);
+    });
+
+    it("returns false when the key does not exist", function () {
+      expect(Storage.has("foo")).toBe(false);
     });
   });
 });
