@@ -38,7 +38,6 @@ function SheetProperty(sheetId, prop) {
 }
 
 SheetProperty.createId = SheetProperty_createId;
-SheetProperty.index    = SheetProperty_index;
 SheetProperty.load     = SheetProperty_load;
 SheetProperty.remove   = SheetProperty_remove;
 
@@ -78,10 +77,6 @@ function SheetProperty_createId() {
   return new_id;
 }
 
-function SheetProperty_index() {
-  return Storage.getJSON("sheet_index", []);
-}
-
 /**
  * Load sheet property associated with sheet ID.
  *
@@ -112,35 +107,16 @@ function SheetProperty_save() {
   }, this);
 
   Storage.setJSON(this.storageKey, data);
-  addToIndex(this.sheetId);
 }
 
 /**
  * Remove propety from storage.
  */
 function SheetProperty_remove(sheetId) {
-  removeFromIndex(sheetId);
   Storage.remove(makeStorageKey(sheetId));
 }
 
 // --- implement (private) ---------------------------------
-
-function addToIndex(sheetId) {
-  var index = Storage.getJSON("sheet_index", []);
-  if (index.indexOf(sheetId) == -1) {
-    index.push(sheetId);
-    Storage.setJSON("sheet_index", index);
-  }
-}
-
-function removeFromIndex(sheetId) {
-  var index = Storage.getJSON("sheet_index", []),
-      pos   = index.indexOf(sheetId);
-  if (pos != -1) {
-    index.splice(pos, 1);
-    Storage.setJSON("sheet_index", index);
-  }
-}
 
 function makeStorageKey(sheetId) {
   return "sheet[" + sheetId.toString() + "]";

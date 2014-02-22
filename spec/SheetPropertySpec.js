@@ -20,17 +20,6 @@ describe("SheetProperty", function () {
     });
   });
 
-  describe(".index", function () {
-    it("returns sheet index when index exists", function () {
-      localStorage.setItem("sheet_index", "[1,2]");
-      expect(SheetProperty.index()).toEqual([1, 2]);
-    });
-
-    it("returns an empty array when index does not exist", function () {
-      expect(SheetProperty.index()).toEqual([]);
-    });
-  });
-
   describe("new sheet", function () {
     it("creates new property", function () {
       var property = new SheetProperty(1);
@@ -84,17 +73,6 @@ describe("SheetProperty", function () {
       property.save();
       expect(localStorage.getItem("sheet[1]")).toEqual(expected);
     });
-
-    it("adds sheet ID into sheet index when it has not been indexed", function () {
-      property.save();
-      expect(localStorage.getItem("sheet_index")).toEqual("[1]");
-    });
-
-    it("doesn't add sheet ID into sheet index when it has been indexed", function () {
-      localStorage.setItem("sheet_index", "[1]");
-      property.save();
-      expect(localStorage.getItem("sheet_index")).toEqual("[1]");
-    });
   });
 
   describe("#remove", function () {
@@ -112,12 +90,6 @@ describe("SheetProperty", function () {
 
       property.remove();
       expect(localStorage.getItem("sheet[1]")).toBeNull();
-    });
-
-    it("removes sheet ID from sheet index when it has been indexed", function () {
-      localStorage.setItem("sheet_index", "[1,2]");
-      property.remove();
-      expect(localStorage.getItem("sheet_index")).toEqual("[2]");
     });
   });
 });
