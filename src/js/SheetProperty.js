@@ -35,7 +35,6 @@ function SheetProperty(sheetId, prop) {
     startDate : prop.startDate == null ? null : prop.startDate,
     goalDate  : prop.goalDate  == null ? null : prop.goalDate,
     done      : prop.done      == null ? 0    : prop.done,
-    delay     : prop.delay     == null ? 0    : prop.delay,
     yet       : prop.yet       == null ? 0    : prop.yet,
     total     : prop.total     == null ? 1000 : prop.total
   };
@@ -75,11 +74,6 @@ Object.defineProperties(SheetProperty.prototype, {
     get: function ()      { return this.prop.done; },
     set: function (value) { this.prop.done = value; this._adjustStatus(); }
   },
-  "delay": {
-    enumerable: true,
-    get: function ()      { return this.prop.delay; },
-    set: function (value) { this.prop.delay = value; this._adjustStatus(); }
-  },
   "yet": {
     enumerable: true,
     get: function ()      { return this.prop.yet; },
@@ -115,7 +109,7 @@ function SheetProperty_load(sheetId) {
   var prop = {},
       data = Storage.getJSON(makeStorageKey(sheetId), {});
 
-  ["title", "done", "delay", "yet"].forEach(function (key) {
+  ["title", "done", "yet"].forEach(function (key) {
     prop[key] = data[key];
   });
   ["startDate", "goalDate"].forEach(function (key) {
@@ -149,10 +143,10 @@ function SheetProperty_remove(sheetId) {
 // --- implement (private) ---------------------------------
 
 /**
- * Adjust done, delay, yet values against total value.
+ * Adjust done, yet values against total value.
  */
 function SheetProperty__adjustStatus() {
-  var diff = this.total - (this.done + this.delay + this.yet);
+  var diff = this.total - (this.done + this.yet);
   if (diff > 0) {
     this.prop.yet += diff;
   } else if (diff < 0) {
@@ -163,14 +157,8 @@ function SheetProperty__adjustStatus() {
     } else {
       diff -= this.prop.yet;
       this.prop.yet = 0;
-      if (this.prop.delay >= diff) {
-        this.prop.delay -= diff;
-      } else {
-        diff -= this.prop.delay;
-        this.prop.delay = 0;
-        if (this.prop.done >= diff) {
-          this.prop.done -= diff;
-        }
+      if (this.prop.done >= diff) {
+        this.prop.done -= diff;
       }
     }
   }

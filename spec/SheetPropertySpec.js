@@ -27,7 +27,6 @@ describe("SheetProperty", function () {
       expect(property.startDate).toBeNull();
       expect(property.goalDate ).toBeNull();
       expect(property.done     ).toEqual(0);
-      expect(property.delay    ).toEqual(0);
       expect(property.yet      ).toEqual(1000);
       expect(property.total    ).toEqual(1000);
     });
@@ -42,8 +41,7 @@ describe("SheetProperty", function () {
         startDate: date.getTime(),
         goalDate: date.getTime() + 86400,
         done: 10,
-        delay: 5,
-        yet: 985
+        yet: 990
       };
       localStorage.setItem("sheet[1]", JSON.stringify(data));
     });
@@ -56,7 +54,6 @@ describe("SheetProperty", function () {
       expect(property.goalDate           ).toEqual(jasmine.any(Date));
       expect(property.goalDate.getTime() ).toEqual(data.goalDate    );
       expect(property.done               ).toEqual(data.done        );
-      expect(property.delay              ).toEqual(data.delay       );
       expect(property.yet                ).toEqual(data.yet         );
     });
   });
@@ -106,34 +103,29 @@ describe("SheetProperty", function () {
   describe("#_adjustStatus", function () {
     var patterns = [
       {
-        prepare : {done:    0, delay:    0, yet:    0, total: 1000},
+        prepare : {done:    0, yet:    0, total: 1000},
         modify  : {done: 1000},
-        expected: {done: 1000, delay:    0, yet:    0, total: 1000},
+        expected: {done: 1000, yet:    0, total: 1000},
       },
       {
-        prepare : {done:    0, delay:    0, yet:    0, total: 1000},
-        modify  : {done: 1000, delay: 1000, yet: 1000},
-        expected: {done: 1000, delay:    0, yet:    0, total: 1000},
+        prepare : {done:    0, yet:    0, total: 1000},
+        modify  : {done: 1000, yet: 1000},
+        expected: {done: 1000, yet:    0, total: 1000},
       },
       {
-        prepare : {done:  400, delay:  300, yet:  100, total: 1000},
+        prepare : {done:  400, yet:  300, total: 1000},
         modify  : {done:  800},
-        expected: {done:  800, delay:  200, yet:    0, total: 1000},
+        expected: {done:  800, yet:  200, total: 1000},
       },
       {
-        prepare : {done:  300, delay:  500, yet:  200, total: 1000},
-        modify  : {done:  800},
-        expected: {done:  800, delay:  200, yet:    0, total: 1000},
+        prepare : {done:  600, yet:  100, total: 1000},
+        modify  : {                       total:  500},
+        expected: {done:  500, yet:    0, total:  500},
       },
       {
-        prepare : {done:  600, delay:  300, yet:  100, total: 1000},
-        modify  : {                                    total:  500},
-        expected: {done:  500, delay:    0, yet:    0, total:  500},
-      },
-      {
-        prepare : {done:  500, delay:  300, yet:  100, total: 1000},
-        modify  : {                                    total: 2000},
-        expected: {done:  500, delay:  300, yet: 1200, total: 2000},
+        prepare : {done:  500, yet:  100, total: 1000},
+        modify  : {                       total: 2000},
+        expected: {done:  500, yet: 1500, total: 2000},
       }
     ];
 
