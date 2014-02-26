@@ -59,5 +59,4 @@ bower_components/
 
 # deployed by Grunt
 /lib/
-/js/
-/css/
+/release/

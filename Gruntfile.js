@@ -14,17 +14,20 @@ module.exports = function (grunt) {
         }
       }
     },
+    clean: {
+      release: ['release']
+    },
     copy: {
       libs: {
         files: [
           {
             expand: true,
             src: [
-              'bower_components/jquery/jquery.min.js',
+              'bower_components/jquery/dist/jquery.min.js',
               'bower_components/d3/d3.min.js',
               'bower_components/fastclick/lib/fastclick.js'
             ],
-            dest: 'js/',
+            dest: 'lib/js',
             flatten: true,
             filter: 'isFile'
           }
@@ -32,10 +35,18 @@ module.exports = function (grunt) {
       },
 
       // TODO: use uglify instead of copy
-      js: {expand: true, cwd: 'src/js', src: '*.js', dest: 'js'},
+      js: {expand: true, cwd: 'src/js', src: '*.js', dest: 'release/js'},
 
       // TODO: use cssmin instead of copy
-      css: {expand: true, cwd: 'src/css', src: '*.css', dest: 'css'}
+      css: {expand: true, cwd: 'src/css', src: '*.css', dest: 'release/css'},
+
+      static: {
+        files: [
+          {expand: true, cwd: 'lib',      src: '**/*',   dest: 'release'},
+          {expand: true, cwd: 'src/img',  src: '*.*',    dest: 'release/img'},
+          {expand: true, cwd: 'src/html', src: '*.html', dest: 'release'    }
+        ]
+      }
     },
     jasmine: {
       all: {
@@ -66,6 +77,6 @@ module.exports = function (grunt) {
   grunt.registerTask('install', ['bower:install', 'copy:libs']);
 
   // build js and css files
-  grunt.registerTask('build', ['copy:js', 'copy:css']);
+  grunt.registerTask('build', ['clean:release', 'copy:static', 'copy:js', 'copy:css']);
 
 };
