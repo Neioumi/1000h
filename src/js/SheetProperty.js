@@ -33,8 +33,13 @@ function SheetProperty(sheetId, prop) {
   this.prop = {
     title     : prop.title     == null ? null : prop.title,
     startDate : prop.startDate == null ? null : prop.startDate,
-    goalDate  : prop.goalDate  == null ? null : prop.goalDate
+    goalDate  : prop.goalDate  == null ? null : prop.goalDate,
+    done      : prop.done      == null ? 0    : prop.done,
+    delay     : prop.delay     == null ? 0    : prop.delay,
+    yet       : prop.yet       == null ? 0    : prop.yet,
+    total     : prop.total     == null ? 1000 : prop.total
   };
+  this._adjustStatus();
 }
 
 SheetProperty.createId = SheetProperty_createId;
@@ -43,7 +48,10 @@ SheetProperty.remove   = SheetProperty_remove;
 
 SheetProperty.prototype = {
        save: SheetProperty_save,
-     remove: function () { SheetProperty.remove(this.sheetId); }
+     remove: function () { SheetProperty.remove(this.sheetId); },
+
+// private
+  _adjustStatus: SheetProperty__adjustStatus
 };
 
 Object.defineProperties(SheetProperty.prototype, {
@@ -61,6 +69,26 @@ Object.defineProperties(SheetProperty.prototype, {
     enumerable: true,
     get: function ()      { return this.prop.goalDate; },
     set: function (value) { this.prop.goalDate = value; }
+  },
+  "done": {
+    enumerable: true,
+    get: function ()      { return this.prop.done; },
+    set: function (value) { this.prop.done = value; this._adjustStatus(); }
+  },
+  "delay": {
+    enumerable: true,
+    get: function ()      { return this.prop.delay; },
+    set: function (value) { this.prop.delay = value; this._adjustStatus(); }
+  },
+  "yet": {
+    enumerable: true,
+    get: function ()      { return this.prop.yet; },
+    set: function (value) { this.prop.yet = value; this._adjustStatus(); }
+  },
+  "total": {
+    enumerable: true,
+    get: function ()      { return this.prop.total; },
+    set: function (value) { this.prop.total = value; this._adjustStatus(); }
   }
 });
 
@@ -87,7 +115,9 @@ function SheetProperty_load(sheetId) {
   var prop = {},
       data = Storage.getJSON(makeStorageKey(sheetId), {});
 
-  prop.title = data.title === undefined ? null : data.title;
+  ["title", "done", "delay", "yet"].forEach(function (key) {
+    prop[key] = data[key];
+  });
   ["startDate", "goalDate"].forEach(function (key) {
     prop[key] = timestampToDate(data[key]);
   });
@@ -117,6 +147,34 @@ function SheetProperty_remove(sheetId) {
 }
 
 // --- implement (private) ---------------------------------
+
+/**
+ * Adjust done, delay, yet values against total value.
+ */
+function SheetProperty__adjustStatus() {
+  var diff = this.total - (this.done + this.delay + this.yet);
+  if (diff > 0) {
+    this.prop.yet += diff;
+  } else if (diff < 0) {
+    diff *= -1;
+
+    if (this.prop.yet >= diff) {
+      this.prop.yet -= diff;
+    } else {
+      diff -= this.prop.yet;
+      this.prop.yet = 0;
+      if (this.prop.delay >= diff) {
+        this.prop.delay -= diff;
+      } else {
+        diff -= this.prop.delay;
+        this.prop.delay = 0;
+        if (this.prop.done >= diff) {
+          this.prop.done -= diff;
+        }
+      }
+    }
+  }
+}
 
 function makeStorageKey(sheetId) {
   return "sheet[" + sheetId.toString() + "]";
