@@ -31,12 +31,12 @@ function SheetProperty(sheetId, prop) {
   this.sheetId    = sheetId;
   this.storageKey = makeStorageKey(sheetId);
   this.prop = {
-    title     : prop.title     == null ? null : prop.title,
-    startDate : prop.startDate == null ? null : prop.startDate,
-    goalDate  : prop.goalDate  == null ? null : prop.goalDate,
-    done      : prop.done      == null ? 0    : prop.done,
-    yet       : prop.yet       == null ? 0    : prop.yet,
-    total     : prop.total     == null ? 1000 : prop.total
+          title: prop.title       == null ? null : prop.title,
+      startDate: prop.startDate   == null ? null : prop.startDate,
+       goalDate: prop.goalDate    == null ? null : prop.goalDate,
+           done: prop.done        == null ?    0 : prop.done,
+          total: prop.total       == null ? 1000 : prop.total,
+    hoursPerDay: prop.hoursPerDay == null ?    8 : prop.hoursPerDay
   };
   this._adjustStatus();
 }
@@ -46,11 +46,10 @@ SheetProperty.load     = SheetProperty_load;
 SheetProperty.remove   = SheetProperty_remove;
 
 SheetProperty.prototype = {
-       save: SheetProperty_save,
-     remove: function () { SheetProperty.remove(this.sheetId); },
-
-// private
-  _adjustStatus: SheetProperty__adjustStatus
+            save: SheetProperty_save,
+          remove: function () { SheetProperty.remove(this.sheetId); },
+  getElapsedTime: SheetProperty_getElapsedTime,
+        getDelay: SheetProperty_getDelay
 };
 
 Object.defineProperties(SheetProperty.prototype, {
@@ -72,21 +71,31 @@ Object.defineProperties(SheetProperty.prototype, {
   "done": {
     enumerable: true,
     get: function ()      { return this.prop.done; },
-    set: function (value) { this.prop.done = value; this._adjustStatus(); }
+    set: SheetProperty_set_done
+  },
+  "delay": {
+    enumerable: true,
+    get: SheetProperty_get_delay
   },
   "yet": {
     enumerable: true,
-    get: function ()      { return this.prop.yet; },
-    set: function (value) { this.prop.yet = value; this._adjustStatus(); }
+    get: SheetProperty_get_yet
   },
   "total": {
     enumerable: true,
     get: function ()      { return this.prop.total; },
-    set: function (value) { this.prop.total = value; this._adjustStatus(); }
+    set: SheetProperty_set_total
+  },
+  "hoursPerDay": {
+    enumerable: true,
+    get: function ()      { return this.prop.hoursPerDay; },
+    set: function (value) { this.prop.hoursPerDay = value; }
   }
 });
 
 // --- implement -------------------------------------------
+
+// --- module methods --------
 
 /**
  * Create new sheet ID.
@@ -109,7 +118,7 @@ function SheetProperty_load(sheetId) {
   var prop = {},
       data = Storage.getJSON(makeStorageKey(sheetId), {});
 
-  ["title", "done", "yet"].forEach(function (key) {
+  ["title", "done", "total", "hoursPerDay"].forEach(function (key) {
     prop[key] = data[key];
   });
   ["startDate", "goalDate"].forEach(function (key) {
@@ -119,13 +128,65 @@ function SheetProperty_load(sheetId) {
   return new SheetProperty(sheetId, prop);
 }
 
+// --- properties ------------
+
+function SheetProperty_set_done(value) {
+  if (value >= 0 && value <= this.prop.total) {
+    this.prop.done = value;
+  }
+}
+
+function SheetProperty_get_delay() {
+  var delay = this.getDelay();
+  return delay < 0 ? 0 : delay;
+}
+
+function SheetProperty_get_yet() {
+  return this.prop.total - this.prop.done;
+}
+
+function SheetProperty_set_total(value) {
+  if (value >= 0) {
+    this.prop.total = value;
+    if (this.prop.done > this.prop.total) {
+      this.prop.done = this.prop.total;
+    }
+  }
+}
+
+// --- instance methods ------
+
+function SheetProperty_getElapsedTime(now) {
+  if (now == null) {
+    now = new Date();
+  }
+  return now.getTime() - this.prop.startDate.getTime();
+}
+
+function SheetProperty_getDelay(now) {
+  var estimated_hours, elapsed_hours, elapsed_days, remaining_hours_in_today;
+
+  elapsed_hours = Math.floor(this.getElapsedTime(now) / (60 * 60 * 1000));
+  elapsed_days  = Math.floor(elapsed_hours / 24);
+  remaining_hours_in_today = 24 - (elapsed_hours % 24);
+
+  estimated_hours = elapsed_days * this.prop.hoursPerDay;
+  if (remaining_hours_in_today < this.prop.hoursPerDay) {
+    estimated_hours += this.prop.hoursPerDay - remaining_hours_in_today;
+  }
+
+  return estimated_hours - this.prop.done;
+}
+
 /**
  * Save property into storage.
  */
 function SheetProperty_save() {
-  var data = {
-    title: this.prop.title
-  };
+  var data = {};
+
+  ["title", "done", "total", "hoursPerDay"].forEach(function (key) {
+    data[key] = this.prop[key];
+  });
   ["startDate", "goalDate"].forEach(function (key) {
     data[key] = dateToTimestamp(this.prop[key]);
   }, this);
@@ -140,29 +201,7 @@ function SheetProperty_remove(sheetId) {
   Storage.remove(makeStorageKey(sheetId));
 }
 
-// --- implement (private) ---------------------------------
-
-/**
- * Adjust done, yet values against total value.
- */
-function SheetProperty__adjustStatus() {
-  var diff = this.total - (this.done + this.yet);
-  if (diff > 0) {
-    this.prop.yet += diff;
-  } else if (diff < 0) {
-    diff *= -1;
-
-    if (this.prop.yet >= diff) {
-      this.prop.yet -= diff;
-    } else {
-      diff -= this.prop.yet;
-      this.prop.yet = 0;
-      if (this.prop.done >= diff) {
-        this.prop.done -= diff;
-      }
-    }
-  }
-}
+// --- utilities -------------
 
 function makeStorageKey(sheetId) {
   return "sheet[" + sheetId.toString() + "]";
