@@ -24,7 +24,7 @@ var _NODE_JS = !!global.process;
  * @param {Object} prop properties
  */
 function SheetProperty(sheetId, prop) {
-  if (prop === undefined) {
+  if (prop == null) {
     prop = {};
   }
 
@@ -38,7 +38,6 @@ function SheetProperty(sheetId, prop) {
           total: prop.total       == null ? 1000 : prop.total,
     hoursPerDay: prop.hoursPerDay == null ?    8 : prop.hoursPerDay
   };
-  this._adjustStatus();
 }
 
 SheetProperty.createId = SheetProperty_createId;
@@ -120,10 +119,10 @@ function SheetProperty_load(sheetId) {
 
   ["title", "done", "total", "hoursPerDay"].forEach(function (key) {
     prop[key] = data[key];
-  });
+  }, this);
   ["startDate", "goalDate"].forEach(function (key) {
     prop[key] = timestampToDate(data[key]);
-  });
+  }, this);
 
   return new SheetProperty(sheetId, prop);
 }
@@ -142,7 +141,7 @@ function SheetProperty_get_delay() {
 }
 
 function SheetProperty_get_yet() {
-  return this.prop.total - this.prop.done;
+  return this.prop.total - this.prop.done - this.delay;
 }
 
 function SheetProperty_set_total(value) {
@@ -156,13 +155,31 @@ function SheetProperty_set_total(value) {
 
 // --- instance methods ------
 
+/**
+ * Return elapsed time in millis from startDate.
+ * When the startDate is null, the return value is 0.
+ *
+ * @param {Date} [now=new Date] current date
+ * @return {Number} elapsed ms
+ */
 function SheetProperty_getElapsedTime(now) {
+  if (this.prop.startDate == null) {
+    return 0;
+  }
   if (now == null) {
     now = new Date();
   }
   return now.getTime() - this.prop.startDate.getTime();
 }
 
+/**
+ * Return delay hours from startDate.
+ * When the startDate is null, the return value is 0.
+ * When the done property is advanced, the return value is negative.
+ *
+ * @param {Date} [now=new Date] current date
+ * @return {Number} delay hours
+ */
 function SheetProperty_getDelay(now) {
   var estimated_hours, elapsed_hours, elapsed_days, remaining_hours_in_today;
 
@@ -186,7 +203,7 @@ function SheetProperty_save() {
 
   ["title", "done", "total", "hoursPerDay"].forEach(function (key) {
     data[key] = this.prop[key];
-  });
+  }, this);
   ["startDate", "goalDate"].forEach(function (key) {
     data[key] = dateToTimestamp(this.prop[key]);
   }, this);

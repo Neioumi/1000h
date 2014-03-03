@@ -23,12 +23,14 @@ describe("SheetProperty", function () {
   describe("new sheet", function () {
     it("creates new property", function () {
       var property = new SheetProperty(1);
-      expect(property.title    ).toBeNull();
-      expect(property.startDate).toBeNull();
-      expect(property.goalDate ).toBeNull();
-      expect(property.done     ).toEqual(0);
-      expect(property.yet      ).toEqual(1000);
-      expect(property.total    ).toEqual(1000);
+      expect(property.title      ).toBeNull();
+      expect(property.startDate  ).toBeNull();
+      expect(property.goalDate   ).toBeNull();
+      expect(property.done       ).toEqual(0);
+      expect(property.delay      ).toEqual(0);
+      expect(property.yet        ).toEqual(1000);
+      expect(property.total      ).toEqual(1000);
+      expect(property.hoursPerDay).toEqual(8);
     });
   });
 
@@ -41,7 +43,8 @@ describe("SheetProperty", function () {
         startDate: date.getTime(),
         goalDate: date.getTime() + 86400,
         done: 10,
-        yet: 990
+        total: 1000,
+        hoursPerDay: 8
       };
       localStorage.setItem("sheet[1]", JSON.stringify(data));
     });
@@ -54,7 +57,10 @@ describe("SheetProperty", function () {
       expect(property.goalDate           ).toEqual(jasmine.any(Date));
       expect(property.goalDate.getTime() ).toEqual(data.goalDate    );
       expect(property.done               ).toEqual(data.done        );
-      expect(property.yet                ).toEqual(data.yet         );
+      expect(property.delay              ).toEqual(0                );
+      expect(property.yet                ).toEqual(990              );
+      expect(property.total              ).toEqual(1000             );
+      expect(property.hoursPerDay        ).toEqual(8                );
     });
   });
 
@@ -71,14 +77,17 @@ describe("SheetProperty", function () {
     });
 
     it("saves properties", function () {
-      var expected = JSON.stringify({
+      var expected = {
         title: "title for sheet1",
         startDate: date.getTime(),
-        goalDate: date.getTime() + 86400
-      });
+        goalDate: date.getTime() + 86400,
+        done: 0,
+        total: 1000,
+        hoursPerDay: 8
+      };
 
       property.save();
-      expect(localStorage.getItem("sheet[1]")).toEqual(expected);
+      expect(JSON.parse(localStorage.getItem("sheet[1]"))).toEqual(expected);
     });
   });
 
@@ -100,45 +109,95 @@ describe("SheetProperty", function () {
     });
   });
 
-  describe("#_adjustStatus", function () {
+  describe("#getElapsedTime", function () {
+    var property;
+
+    beforeEach(function () {
+      property = new SheetProperty(1, {
+        startDate: new Date(2014, 2, 2)
+      });
+    });
+
+    it("returns 86400000 when 1 day after", function () {
+      expect(property.getElapsedTime(new Date(2014, 2, 3))).toEqual(86400000);
+    });
+
+    it("returns 0 if the startDate is null", function () {
+      property.startDate = null;
+      expect(property.getElapsedTime()).toEqual(0);
+    });
+  });
+
+  describe("#getDelay", function () {
+    var property;
+
+    beforeEach(function () {
+      property = new SheetProperty(1, {
+        startDate: new Date(2014, 2, 2)
+      });
+    });
+
     var patterns = [
-      {
-        prepare : {done:    0, yet:    0, total: 1000},
-        modify  : {done: 1000},
-        expected: {done: 1000, yet:    0, total: 1000},
-      },
-      {
-        prepare : {done:    0, yet:    0, total: 1000},
-        modify  : {done: 1000, yet: 1000},
-        expected: {done: 1000, yet:    0, total: 1000},
-      },
-      {
-        prepare : {done:  400, yet:  300, total: 1000},
-        modify  : {done:  800},
-        expected: {done:  800, yet:  200, total: 1000},
-      },
-      {
-        prepare : {done:  600, yet:  100, total: 1000},
-        modify  : {                       total:  500},
-        expected: {done:  500, yet:    0, total:  500},
-      },
-      {
-        prepare : {done:  500, yet:  100, total: 1000},
-        modify  : {                       total: 2000},
-        expected: {done:  500, yet: 1500, total: 2000},
-      }
+      {done:  8, expected:  0},
+      {done: 10, expected: -2},
+      {done:  6, expected:  2},
+      {done:  0, expected:  8},
     ];
 
     patterns.forEach(function (pattern, i) {
-      it(i + ": adjusts status", function () {
-        var property = new SheetProperty(1, pattern.prepare);
-        for (var key in pattern.modify) {
-          property[key] = pattern.modify[key];
-        }
+      it("pattern" + i + ": returns " + pattern.expected + " when done=" + pattern.done, function () {
+        property.done = pattern.done;
+        expect(property.getDelay(new Date(2014, 2, 3))).toEqual(pattern.expected);
+      });
+    });
 
-        for (var key in pattern.expected) {
-          expect(property[key]).toEqual(pattern.expected[key]);
-        }
+    it("return 0 if the startDate is null", function () {
+      property.startDate = null;
+      property.done = 0;
+      expect(property.getDelay(new Date(2014, 2, 3))).toEqual(0);
+    });
+  });
+
+  describe("delay property", function () {
+    var property;
+
+    beforeEach(function () {
+      property = new SheetProperty(1, {
+        startDate: new Date(2014, 2, 2)
+      });
+    });
+
+    it("returns the delay when #getDelay returns positive value", function () {
+      spyOn(property, "getDelay").and.returnValue(8);
+      expect(property.delay).toEqual(8);
+    });
+
+    it("returns 0 when #getDelay returns negative value", function () {
+      spyOn(property, "getDelay").and.returnValue(-2);
+      expect(property.delay).toEqual(0);
+    });
+  });
+
+  describe("yet property", function () {
+    var property;
+
+    beforeEach(function () {
+      property = new SheetProperty(1, {
+        startDate: new Date(2014, 2, 2)
+      });
+    });
+
+    var patterns = [
+      {done:  8, delay: 0, expected: 992},
+      {done:  0, delay: 8, expected: 992},
+      {done:  6, delay: 2, expected: 992},
+    ];
+
+    patterns.forEach(function (pattern, i) {
+      it("pattern" + i + ": returns " + pattern.expected + " when done=" + pattern.done + ", delay=" + pattern.delay, function () {
+        property.done = pattern.done;
+        spyOn(property, "getDelay").and.returnValue(pattern.delay);
+        expect(property.yet).toEqual(pattern.expected);
       });
     });
   });
