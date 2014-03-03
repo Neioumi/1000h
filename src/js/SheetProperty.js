@@ -32,8 +32,8 @@ function SheetProperty(sheetId, prop) {
   this.storageKey = makeStorageKey(sheetId);
   this.prop = {
           title: prop.title       == null ? null : prop.title,
-      startDate: prop.startDate   == null ? null : prop.startDate,
-       goalDate: prop.goalDate    == null ? null : prop.goalDate,
+      startDate: prop.startDate   == null ? null : clearTimePart(prop.startDate),
+       goalDate: prop.goalDate    == null ? null : clearTimePart(prop.goalDate),
            done: prop.done        == null ?    0 : prop.done,
           total: prop.total       == null ? 1000 : prop.total,
     hoursPerDay: prop.hoursPerDay == null ?    8 : prop.hoursPerDay
@@ -60,12 +60,12 @@ Object.defineProperties(SheetProperty.prototype, {
   "startDate": {
     enumerable: true,
     get: function ()      { return this.prop.startDate; },
-    set: function (value) { this.prop.startDate = value; }
+    set: SheetProperty_set_startDate
   },
   "goalDate": {
     enumerable: true,
     get: function ()      { return this.prop.goalDate; },
-    set: function (value) { this.prop.goalDate = value; }
+    set: SheetProperty_set_goalDate
   },
   "done": {
     enumerable: true,
@@ -128,6 +128,20 @@ function SheetProperty_load(sheetId) {
 }
 
 // --- properties ------------
+
+function SheetProperty_set_startDate(value) {
+  if (value != null) {
+    value = clearTimePart(value);
+  }
+  this.prop.startDate = value;
+}
+
+function SheetProperty_set_goalDate(value) {
+  if (value != null) {
+    value = clearTimePart(value);
+  }
+  this.prop.goalDate = value;
+}
 
 function SheetProperty_set_done(value) {
   if (value >= 0 && value <= this.prop.total) {
@@ -230,6 +244,10 @@ function dateToTimestamp(date) {
 
 function timestampToDate(timestamp) {
   return timestamp == null ? null : new Date(Number(timestamp));
+}
+
+function clearTimePart(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
 if (_NODE_JS) {

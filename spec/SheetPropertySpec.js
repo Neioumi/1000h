@@ -37,11 +37,11 @@ describe("SheetProperty", function () {
   describe(".load", function () {
     var data;
     beforeEach(function () {
-      var date = new Date();
+      var date = new Date(2014, 2, 2);
       data = {
         title: "title for sheet1",
         startDate: date.getTime(),
-        goalDate: date.getTime() + 86400,
+        goalDate: date.getTime() + 86400000,
         done: 10,
         total: 1000,
         hoursPerDay: 8
@@ -68,11 +68,11 @@ describe("SheetProperty", function () {
     var date, property;
 
     beforeEach(function () {
-      date = new Date();
+      date = new Date(2014, 2, 2);
       property = new SheetProperty(1, {
         title: "title for sheet1",
         startDate: date,
-        goalDate: new Date(date.getTime() + 86400)
+        goalDate: new Date(date.getTime() + 86400000)
       });
     });
 
@@ -80,7 +80,7 @@ describe("SheetProperty", function () {
       var expected = {
         title: "title for sheet1",
         startDate: date.getTime(),
-        goalDate: date.getTime() + 86400,
+        goalDate: date.getTime() + 86400000,
         done: 0,
         total: 1000,
         hoursPerDay: 8
@@ -199,6 +199,19 @@ describe("SheetProperty", function () {
         spyOn(property, "getDelay").and.returnValue(pattern.delay);
         expect(property.yet).toEqual(pattern.expected);
       });
+    });
+  });
+
+  describe("startDate property", function () {
+    var property;
+
+    beforeEach(function () {
+      property = new SheetProperty(1);
+    });
+
+    it("keeps time part as 00:00:00", function () {
+      property.startDate = new Date(2014, 2, 2, 10, 20, 30);
+      expect(property.startDate).toEqual(new Date(2014, 2, 2, 0, 0, 0));
     });
   });
 });
