@@ -138,10 +138,11 @@ describe("SheetProperty", function () {
     });
 
     var patterns = [
-      {done:  8, expected:  0},
-      {done: 10, expected: -2},
-      {done:  6, expected:  2},
-      {done:  0, expected:  8},
+      {done:  8  , expected:  0  },
+      {done: 10  , expected: -2  },
+      {done:  6  , expected:  2  },
+      {done:  0  , expected:  8  },
+      {done:  5.5, expected:  2.5},
     ];
 
     patterns.forEach(function (pattern, i) {
@@ -188,9 +189,10 @@ describe("SheetProperty", function () {
     });
 
     var patterns = [
-      {done:  8, delay: 0, expected: 992},
-      {done:  0, delay: 8, expected: 992},
-      {done:  6, delay: 2, expected: 992},
+      {done: 8   , delay: 0   , expected: 992  },
+      {done: 0   , delay: 8   , expected: 992  },
+      {done: 6   , delay: 2   , expected: 992  },
+      {done: 4.25, delay: 3.25, expected: 992.5},
     ];
 
     patterns.forEach(function (pattern, i) {
