@@ -57,8 +57,8 @@ describe("SheetProperty", function () {
       expect(property.goalDate           ).toEqual(jasmine.any(Date));
       expect(property.goalDate.getTime() ).toEqual(data.goalDate    );
       expect(property.done               ).toEqual(data.done        );
-      expect(property.delay              ).toEqual(0                );
-      expect(property.yet                ).toEqual(990              );
+      expect(property.delay              ).toEqual(jasmine.any(Number));
+      expect(property.yet                ).toEqual(jasmine.any(Number));
       expect(property.total              ).toEqual(1000             );
       expect(property.hoursPerDay        ).toEqual(8                );
     });
