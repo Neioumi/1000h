@@ -174,16 +174,25 @@ function SheetProperty_set_total(value) {
  * When the startDate is null, the return value is 0.
  *
  * @param {Date} [now=new Date] current date
+ * @param {Boolean} [ignoreTime=true] ignore time part
  * @return {Number} elapsed ms
  */
-function SheetProperty_getElapsedTime(now) {
+function SheetProperty_getElapsedTime(now, ignoreTime) {
   if (this.prop.startDate == null) {
     return 0;
   }
   if (now == null) {
     now = new Date();
   }
-  return now.getTime() - this.prop.startDate.getTime();
+  if (ignoreTime === undefined) {
+    ignoreTime = true;
+  }
+
+  if (ignoreTime) {
+    return clearTimePart(now).getTime() - this.prop.startDate.getTime();
+  } else {
+    return now.getTime() - this.prop.startDate.getTime();
+  }
 }
 
 /**
@@ -192,12 +201,13 @@ function SheetProperty_getElapsedTime(now) {
  * When the done property is advanced, the return value is negative.
  *
  * @param {Date} [now=new Date] current date
+ * @param {Boolean} [ignoreTime=true] ignore time part
  * @return {Number} delay hours
  */
-function SheetProperty_getDelay(now) {
+function SheetProperty_getDelay(now, ignoreTime) {
   var estimated_hours, elapsed_hours, elapsed_days, remaining_hours_in_today;
 
-  elapsed_hours = Math.floor(this.getElapsedTime(now) / (60 * 60 * 1000));
+  elapsed_hours = Math.floor(this.getElapsedTime(now, ignoreTime) / (60 * 60 * 1000));
   elapsed_days  = Math.floor(elapsed_hours / 24);
   remaining_hours_in_today = 24 - (elapsed_hours % 24);
 

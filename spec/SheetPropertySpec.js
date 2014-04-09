@@ -122,6 +122,14 @@ describe("SheetProperty", function () {
       expect(property.getElapsedTime(new Date(2014, 2, 3))).toEqual(86400000);
     });
 
+    it("returns 86400000 when 1 day 3 hours after", function () {
+      expect(property.getElapsedTime(new Date(2014, 2, 3, 3, 0, 0))).toEqual(86400000);
+    });
+
+    it("returns 97200000 when 1 day 3 hours after and ignoreTime=false", function () {
+      expect(property.getElapsedTime(new Date(2014, 2, 3, 3, 0, 0), false)).toEqual(86400000 + 10800000);
+    });
+
     it("returns 0 if the startDate is null", function () {
       property.startDate = null;
       expect(property.getElapsedTime()).toEqual(0);
@@ -152,7 +160,12 @@ describe("SheetProperty", function () {
       });
     });
 
-    it("return 0 if the startDate is null", function () {
+    it("returns 11 when 1 day 20 hours after and ignoreTime=false", function () {
+      property.done = 1;
+      expect(property.getDelay(new Date(2014, 2, 3, 20, 0, 0), false)).toEqual(11);
+    });
+
+    it("returns 0 if the startDate is null", function () {
       property.startDate = null;
       property.done = 0;
       expect(property.getDelay(new Date(2014, 2, 3))).toEqual(0);
