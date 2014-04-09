@@ -36,8 +36,12 @@ function SheetProperty(sheetId, prop) {
        goalDate: prop.goalDate    == null ? null : clearTimePart(prop.goalDate),
            done: prop.done        == null ?    0 : prop.done,
           total: prop.total       == null ? 1000 : prop.total,
-    hoursPerDay: prop.hoursPerDay == null ?    8 : prop.hoursPerDay
+    hoursPerDay: prop.hoursPerDay == null ? null : prop.hoursPerDay
   };
+
+  if (this.prop.hoursPerDay === null) {
+    this.prop.hoursPerDay = calculateHoursPerDay(this.prop) || 8;
+  }
 }
 
 SheetProperty.createId = SheetProperty_createId;
@@ -258,6 +262,31 @@ function timestampToDate(timestamp) {
 
 function clearTimePart(date) {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function calculateHoursPerDay(prop) {
+  if (prop.startDate === null || prop.goalDate === null || prop.total === null) {
+    return null;
+  }
+
+  var hours, mins,
+      days = (prop.goalDate.getTime() - prop.startDate.getTime()) / (24 * 60 * 60 * 1000),
+      x = prop.total / days;
+
+  // round up 15 mins
+  hours = Math.floor(x);
+  mins  = x - hours;
+  if (mins > 0.75) {
+    hours += 1;
+  } else if (mins > 0.5) {
+    hours += 0.75;
+  } else if (mins > 0.25) {
+    hours += 0.5;
+  } else if (mins > 0) {
+    hours += 0.25;
+  }
+
+  return hours;
 }
 
 if (_NODE_JS) {

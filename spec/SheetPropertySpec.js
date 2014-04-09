@@ -32,6 +32,18 @@ describe("SheetProperty", function () {
       expect(property.total      ).toEqual(1000);
       expect(property.hoursPerDay).toEqual(8);
     });
+
+    it("calculates hoursPerDay from startDate, goalDate and total", function () {
+      var date = new Date(2014, 2, 2);
+      var property = new SheetProperty(1, {
+        title: "title for sheet1",
+        startDate: date,
+        goalDate: new Date(date.getTime() + (86400000 * 7)),
+        total: 50
+      });
+
+      expect(property.hoursPerDay).toEqual(7.25);
+    });
   });
 
   describe(".load", function () {
@@ -42,8 +54,8 @@ describe("SheetProperty", function () {
         title: "title for sheet1",
         startDate: date.getTime(),
         goalDate: date.getTime() + 86400000,
-        done: 10,
-        total: 1000,
+        done: 5,
+        total: 10,
         hoursPerDay: 8
       };
       localStorage.setItem("sheet[1]", JSON.stringify(data));
@@ -59,7 +71,7 @@ describe("SheetProperty", function () {
       expect(property.done               ).toEqual(data.done        );
       expect(property.delay              ).toEqual(jasmine.any(Number));
       expect(property.yet                ).toEqual(jasmine.any(Number));
-      expect(property.total              ).toEqual(1000             );
+      expect(property.total              ).toEqual(10               );
       expect(property.hoursPerDay        ).toEqual(8                );
     });
   });
@@ -72,7 +84,8 @@ describe("SheetProperty", function () {
       property = new SheetProperty(1, {
         title: "title for sheet1",
         startDate: date,
-        goalDate: new Date(date.getTime() + 86400000)
+        goalDate: new Date(date.getTime() + 86400000),
+        hoursPerDay: 8
       });
     });
 
