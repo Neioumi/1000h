@@ -11,6 +11,12 @@ npm install
 grunt install
 ```
 
+Watch for changes and build automatically.
+
+```
+grunt watch
+```
+
 Build app.
 
 ```
