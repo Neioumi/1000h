@@ -57,10 +57,26 @@ module.exports = function (grunt) {
         }
       }
     },
+    compass: {
+      dist: {
+        options: {
+          environment: 'production',
+          force: true
+        }
+      },
+      dev: {
+        options: {
+        }
+      }
+    },
     watch: {
       js: {
         files: ['src/js/*.js', 'spec/*.js'],
         tasks: ['jasmine:all']
+      },
+      css: {
+        files: ['src/sass/*.sass', 'src/sass/*.scss'],
+        tasks: ['compass:dev']
       }
     }
   });
@@ -77,6 +93,10 @@ module.exports = function (grunt) {
   grunt.registerTask('install', ['bower:install', 'copy:libs']);
 
   // build js and css files
-  grunt.registerTask('build', ['clean:release', 'copy:static', 'copy:js', 'copy:css']);
+  grunt.registerTask('build', [
+    'clean:release',
+    'compass:dist',
+    'copy:static', 'copy:js', 'copy:css'
+  ]);
 
 };

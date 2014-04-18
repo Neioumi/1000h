@@ -1,0 +1,7 @@
+@import "compass";
+
+p {
+	@include inline-block;
+	@include box-shadow( 0 0 10px #a82f34);
+	@include opacity(.5);
+}

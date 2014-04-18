@@ -57,6 +57,9 @@ node_modules/
 # bower
 bower_components/
 
+# sass
+.sass-cache
+
 # deployed by Grunt
 /lib/
 /release/
